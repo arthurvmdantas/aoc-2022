@@ -1,3 +1,3 @@
-import { d1_p1 } from "./src/d1.js";
+import { d1_p2 } from "./src/d1.js";
 
-d1_p1();
+d1_p2();
