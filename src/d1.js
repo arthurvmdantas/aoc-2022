@@ -18,7 +18,8 @@ export async function d1_p1() {
   };
 
   await readInputLineByLine("src/inputs/d1.txt", myCallback);
-  console.log("The Elf with the most calories is carrying", maxCalories);
+
+  return maxCalories;
 }
 
 // Day 1 - Puzzle 2
@@ -31,26 +32,12 @@ export async function d1_p2() {
   const myCallback = (line) => {
     // an empty line means that I've read all the calories for the current Elf
     if (line === "") {
-      if (totalCalories >= topThreeCalories[0])
-        topThreeCalories = [
-          totalCalories,
-          topThreeCalories[0],
-          topThreeCalories[1],
-        ];
-      else if (totalCalories >= topThreeCalories[1])
-        topThreeCalories = [
-          topThreeCalories[0],
-          totalCalories,
-          topThreeCalories[1],
-        ];
-      else if (totalCalories > topThreeCalories[2])
-        topThreeCalories = [
-          topThreeCalories[0],
-          topThreeCalories[1],
-          totalCalories,
-        ];
+      topThreeCalories = d1_p2_updateTopThreeCalories(
+        topThreeCalories,
+        totalCalories
+      );
 
-      totalCalories = 0; // finish current Elf
+      totalCalories = 0; // finish current Elf calories counting
       return;
     }
 
@@ -58,8 +45,16 @@ export async function d1_p2() {
   };
 
   await readInputLineByLine("src/inputs/d1.txt", myCallback);
-  console.log(
-    "The top three Elves with the most calories are carrying",
-    topThreeCalories.reduce((acc, curr) => acc + curr)
-  );
+
+  return topThreeCalories.reduce((acc, curr) => acc + curr);
+}
+
+function d1_p2_updateTopThreeCalories(topThree, currentTotal) {
+  if (currentTotal >= topThree[0])
+    return [currentTotal, topThree[0], topThree[1]];
+  else if (currentTotal >= topThree[1])
+    return [topThree[0], currentTotal, topThree[1]];
+  else if (currentTotal > topThree[2])
+    return [topThree[0], topThree[1], currentTotal];
+  else return topThree;
 }
